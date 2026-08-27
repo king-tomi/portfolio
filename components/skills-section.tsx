@@ -2,51 +2,120 @@
 
 import { motion } from "framer-motion"
 
-interface Skill {
-  name: string
-  level: number
-  color: string
+interface SkillGroup {
+  category: string
+  skills: string[]
+}
+
+const groups: SkillGroup[] = [
+  {
+    category: "Data Engineering",
+    skills: [
+      "ETL / ELT pipelines",
+      "Apache Airflow",
+      "Dimensional modelling",
+      "PostgreSQL",
+      "Data warehousing",
+      "MongoDB",
+      "Idempotent loads",
+      "Data quality checks",
+      "Metabase",
+    ],
+  },
+  {
+    category: "AI / ML Engineering",
+    skills: [
+      "RAG systems",
+      "Vector databases (Pinecone)",
+      "Embeddings & chunking",
+      "Retrieval & ranking",
+      "LLM orchestration",
+      "Intent classification",
+      "Prompt engineering",
+      "Sentiment analysis",
+    ],
+  },
+  {
+    category: "Backend & APIs",
+    skills: [
+      "Python",
+      "FastAPI",
+      "NestJS",
+      "Django",
+      "REST API design",
+      "Celery / RabbitMQ",
+      "Redis",
+      "Transactional outbox",
+      "Microservices",
+    ],
+  },
+  {
+    category: "Platform & Tooling",
+    skills: [
+      "Docker",
+      "Docker Compose",
+      "CI/CD",
+      "Git",
+      "SQLAlchemy / TypeORM",
+      "PostGIS",
+      "OpenTelemetry / Prometheus",
+    ],
+  },
+  {
+    category: "Languages",
+    skills: ["Python", "TypeScript / JavaScript", "SQL", "Go", "Java"],
+  },
+]
+
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.05 } },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] },
+  },
 }
 
 export default function SkillsSection() {
-  const skills: Skill[] = [
-    { name: "Python", level: 95, color: "bg-blue-500" },
-    { name: "JavaScript", level: 85, color: "bg-yellow-500" },
-    { name: "Django", level: 85, color: "bg-blue-600" },
-    { name: "FastAPI", level: 95, color: "bg-orange-500" },
-    { name: "Go", level: 75, color: "bg-red-800" },
-    { name: "Java", level: 75, color: "bg-red-500" },
-    { name: "Data Engineering", level: 85, color: "bg-indigo-500" },
-    { name: "AI Engineering", level: 95, color: "bg-cyan-500" },
-    { name: "API Engineering", level: 90, color: "bg-purple-500" },
-    { name: "Web Development", level: 70, color: "bg-green-600" },
-    { name: "Data Visualization", level: 95, color: "bg-green-500" },
-  ]
-
   return (
-    <div className="grid md:grid-cols-2 gap-8">
-      {skills.map((skill, index) => (
+    <div className="grid gap-10 md:grid-cols-2">
+      {groups.map((group, index) => (
         <motion.div
-          key={skill.name}
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
-          viewport={{ once: true }}
-          className="space-y-2"
+          key={group.category}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: index * 0.08 }}
+          className="space-y-4"
         >
-          <div className="flex justify-between items-center">
-            <h3 className="font-medium">{skill.name}</h3>
-            <span className="text-sm text-muted-foreground">{skill.level}%</span>
+          <div className="flex items-center gap-3">
+            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-pink-500 to-cyan-500" />
+            <h3 className="text-lg font-semibold">{group.category}</h3>
           </div>
-          <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-            <motion.div
-              className={`h-full ${skill.color}`}
-              initial={{ width: 0 }}
-              whileInView={{ width: `${skill.level}%` }}
-              transition={{ duration: 1, delay: 0.2 }}
-              viewport={{ once: true }}
-            />
-          </div>
+          <motion.div
+            className="flex flex-wrap gap-2"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-40px" }}
+          >
+            {group.skills.map((skill) => (
+              <motion.span
+                key={skill}
+                variants={itemVariants}
+                whileHover={{ y: -3, scale: 1.04 }}
+                className="cursor-default rounded-full border bg-secondary/60 px-3 py-1 text-sm text-secondary-foreground transition-colors hover:border-primary/50 hover:bg-secondary"
+              >
+                {skill}
+              </motion.span>
+            ))}
+          </motion.div>
         </motion.div>
       ))}
     </div>

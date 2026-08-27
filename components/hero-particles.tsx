@@ -6,6 +6,8 @@ import { motion } from "framer-motion"
 interface Particle {
   x: number
   y: number
+  baseX: number
+  baseY: number
   size: number
   speedX: number
   speedY: number
@@ -18,117 +20,122 @@ export default function HeroParticles() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    // Set canvas to full screen
-    const handleResize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+    let width = 0
+    let height = 0
+
+    const resize = () => {
+      width = canvas.clientWidth
+      height = canvas.clientHeight
+      canvas.width = width * dpr
+      canvas.height = height * dpr
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
+    resize()
+    window.addEventListener("resize", resize)
 
-    window.addEventListener("resize", handleResize)
-    handleResize()
-
-    // Create particles
-    const particleCount = Math.min(Math.floor(window.innerWidth / 10), 100)
-    const particles: Particle[] = []
-
-    const colors = ["#f472b6", "#c084fc", "#818cf8", "#22d3ee"]
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 3 + 1,
-        speedX: (Math.random() - 0.5) * 0.5,
-        speedY: (Math.random() - 0.5) * 0.5,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      })
-    }
-
-    // Mouse interaction
-    let mouseX = 0
-    let mouseY = 0
-    const mouseRadius = 100
-
-    canvas.addEventListener("mousemove", (e) => {
-      mouseX = e.clientX
-      mouseY = e.clientY
+    const palette = ["#f472b6", "#c084fc", "#818cf8", "#22d3ee"]
+    const count = Math.min(Math.floor(width / 14), 90)
+    const particles: Particle[] = Array.from({ length: count }, () => {
+      const x = Math.random() * width
+      const y = Math.random() * height
+      return {
+        x,
+        y,
+        baseX: x,
+        baseY: y,
+        size: Math.random() * 2.4 + 0.8,
+        speedX: (Math.random() - 0.5) * 0.35,
+        speedY: (Math.random() - 0.5) * 0.35,
+        color: palette[Math.floor(Math.random() * palette.length)],
+      }
     })
 
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate)
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    const mouse = { x: -9999, y: -9999 }
+    const radius = 130
 
-      particles.forEach((particle, index) => {
-        // Update position
-        particle.x += particle.speedX
-        particle.y += particle.speedY
+    const onMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      mouse.x = e.clientX - rect.left
+      mouse.y = e.clientY - rect.top
+    }
+    const onLeave = () => {
+      mouse.x = -9999
+      mouse.y = -9999
+    }
+    window.addEventListener("mousemove", onMove)
+    window.addEventListener("mouseout", onLeave)
 
-        // Bounce off edges
-        if (particle.x < 0 || particle.x > canvas.width) {
-          particle.speedX *= -1
+    let raf = 0
+    const draw = () => {
+      ctx.clearRect(0, 0, width, height)
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i]
+
+        if (!prefersReduced) {
+          p.x += p.speedX
+          p.y += p.speedY
+          if (p.x < 0 || p.x > width) p.speedX *= -1
+          if (p.y < 0 || p.y > height) p.speedY *= -1
+
+          const dx = mouse.x - p.x
+          const dy = mouse.y - p.y
+          const dist = Math.hypot(dx, dy)
+          if (dist < radius) {
+            const force = (radius - dist) / radius
+            const angle = Math.atan2(dy, dx)
+            p.x -= Math.cos(angle) * force * 1.6
+            p.y -= Math.sin(angle) * force * 1.6
+          }
         }
 
-        if (particle.y < 0 || particle.y > canvas.height) {
-          particle.speedY *= -1
-        }
-
-        // Mouse interaction
-        const dx = mouseX - particle.x
-        const dy = mouseY - particle.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-
-        if (distance < mouseRadius) {
-          const angle = Math.atan2(dy, dx)
-          const force = (mouseRadius - distance) / mouseRadius
-
-          particle.speedX -= Math.cos(angle) * force * 0.02
-          particle.speedY -= Math.sin(angle) * force * 0.02
-        }
-
-        // Draw particle
         ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = particle.color
-        ctx.globalAlpha = 0.6
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fillStyle = p.color
+        ctx.globalAlpha = 0.55
         ctx.fill()
 
-        // Connect particles
-        particles.slice(index + 1).forEach((otherParticle) => {
-          const dx = particle.x - otherParticle.x
-          const dy = particle.y - otherParticle.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-
-          if (distance < 100) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j]
+          const d = Math.hypot(p.x - q.x, p.y - q.y)
+          if (d < 120) {
             ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            ctx.strokeStyle = particle.color
-            ctx.globalAlpha = 0.1 * (1 - distance / 100)
+            ctx.moveTo(p.x, p.y)
+            ctx.lineTo(q.x, q.y)
+            ctx.strokeStyle = p.color
+            ctx.globalAlpha = 0.12 * (1 - d / 120)
+            ctx.lineWidth = 1
             ctx.stroke()
           }
-        })
-      })
-    }
+        }
+      }
+      ctx.globalAlpha = 1
 
-    animate()
+      if (!prefersReduced) raf = requestAnimationFrame(draw)
+    }
+    draw()
 
     return () => {
-      window.removeEventListener("resize", handleResize)
+      cancelAnimationFrame(raf)
+      window.removeEventListener("resize", resize)
+      window.removeEventListener("mousemove", onMove)
+      window.removeEventListener("mouseout", onLeave)
     }
   }, [])
 
   return (
     <motion.canvas
       ref={canvasRef}
-      className="absolute inset-0 z-0"
+      className="absolute inset-0 z-0 h-full w-full"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 1.2 }}
     />
   )
 }

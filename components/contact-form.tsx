@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
 
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xqabbadg"
+
 export default function ContactForm() {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -17,17 +19,38 @@ export default function ContactForm() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    const form = e.currentTarget
+    const data = new FormData(form)
 
-    toast({
-      title: "Message sent!",
-      description: "Thanks for reaching out. I'll get back to you soon.",
-    })
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      })
 
-    setIsSubmitting(false)
-    // Reset form
-    e.currentTarget.reset()
+      if (res.ok) {
+        toast({
+          title: "Message sent",
+          description: "Thanks for reaching out. I'll get back to you soon.",
+        })
+        form.reset()
+      } else {
+        const body = await res.json().catch(() => null)
+        const message =
+          body?.errors?.map((err: { message: string }) => err.message).join(", ") ||
+          "Something went wrong. Please email me directly instead."
+        toast({ title: "Could not send message", description: message, variant: "destructive" })
+      }
+    } catch {
+      toast({
+        title: "Could not send message",
+        description: "Network error. Please email me directly instead.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

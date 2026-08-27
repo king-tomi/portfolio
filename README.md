@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio — Ayodabo Tomisin
 
-## Getting Started
+Personal portfolio site for Ayodabo Tomisin Kolawole, Data & AI Engineer.
 
-First, run the development server:
+Live: https://ayodabotomisin.netlify.app
+
+## Stack
+
+- [Next.js 15](https://nextjs.org) (App Router) + React 19
+- Tailwind CSS + shadcn/ui
+- Framer Motion for animation
+- Formspree for the contact form
+- Deployed on Netlify
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/app/            App Router pages (home, /blog, /blog/[slug])
+components/          Section components (hero, projects, skills, contact, blog)
+components/ui/       shadcn/ui primitives
+public/images/       Project and blog imagery
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Projects** — `src/app/page.tsx`. Private/client work uses `isPrivate` on `<ProjectCard>` to
+  render a "Private / client work" label instead of repo links.
+- **Skills** — `components/skills-section.tsx` (grouped by category).
+- **Writing** — `components/featured-blogs.tsx` and `src/app/blog/`.
+- **Contact form** — `components/contact-form.tsx`, posts to the Formspree endpoint defined at the
+  top of that file.

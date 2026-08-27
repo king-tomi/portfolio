@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6a13c"/><stop offset="1" stop-color="#4f8a86"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="#0d111a"/>
+  <rect width="800" height="400" fill="url(#g)" opacity="0.12"/>
+  <g opacity="0.9"><rect x="40" y="244" width="34" height="116" rx="4" fill="url(#g)" opacity="0.35572916666666665"/><rect x="106" y="246" width="34" height="114" rx="4" fill="url(#g)" opacity="0.39794024348422496"/><rect x="172" y="221" width="34" height="139" rx="4" fill="url(#g)" opacity="0.600130744170096"/><rect x="238" y="323" width="34" height="37" rx="4" fill="url(#g)" opacity="0.44995498971193415"/><rect x="304" y="271" width="34" height="89" rx="4" fill="url(#g)" opacity="0.5276598936899862"/><rect x="370" y="335" width="34" height="25" rx="4" fill="url(#g)" opacity="0.5616405178326475"/><rect x="436" y="322" width="34" height="38" rx="4" fill="url(#g)" opacity="0.8173289609053498"/><rect x="502" y="284" width="34" height="76" rx="4" fill="url(#g)" opacity="0.8194165809327847"/><rect x="568" y="304" width="34" height="56" rx="4" fill="url(#g)" opacity="0.4074095507544581"/><rect x="634" y="323" width="34" height="37" rx="4" fill="url(#g)" opacity="0.6245177469135803"/><rect x="700" y="245" width="34" height="115" rx="4" fill="url(#g)" opacity="0.43987697187928665"/></g>
+  <g><line x1="130" y1="203" x2="375" y2="108" stroke="url(#g)" stroke-width="1.5" opacity="0.5"/><line x1="375" y1="108" x2="662" y2="114" stroke="url(#g)" stroke-width="1.5" opacity="0.5"/><line x1="662" y1="114" x2="595" y2="65" stroke="url(#g)" stroke-width="1.5" opacity="0.5"/><line x1="595" y1="65" x2="359" y2="175" stroke="url(#g)" stroke-width="1.5" opacity="0.5"/><line x1="359" y1="175" x2="115" y2="214" stroke="url(#g)" stroke-width="1.5" opacity="0.5"/><line x1="115" y1="214" x2="525" y2="64" stroke="url(#g)" stroke-width="1.5" opacity="0.5"/><circle cx="130" cy="203" r="5" fill="url(#g)"/><circle cx="375" cy="108" r="5" fill="url(#g)"/><circle cx="662" cy="114" r="5" fill="url(#g)"/><circle cx="595" cy="65" r="5" fill="url(#g)"/><circle cx="359" cy="175" r="5" fill="url(#g)"/><circle cx="115" cy="214" r="5" fill="url(#g)"/><circle cx="525" cy="64" r="5" fill="url(#g)"/></g>
+  <line x1="30" y1="360" x2="770" y2="360" stroke="url(#g)" stroke-width="1.5" opacity="0.6"/>
+</svg>

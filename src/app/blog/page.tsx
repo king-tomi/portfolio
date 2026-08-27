@@ -49,9 +49,9 @@ export default function BlogPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Link>
-          <h1 className="text-4xl font-bold tracking-tight mb-4">My Blog</h1>
+          <h1 className="text-4xl font-bold tracking-tight mb-4">Writing</h1>
           <p className="text-xl text-muted-foreground max-w-2xl">
-            Thoughts, ideas, and insights on Python, AI Engineering, and API Development.
+            Notes on Python, data and AI engineering, and building things that scale.
           </p>
         </div>
 
