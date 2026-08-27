@@ -7,7 +7,7 @@ import ScrollProgress from "@/components/motion/scroll-progress"
 
 const inter = Inter({ subsets: ["latin"] })
 
-const siteUrl = "https://ayodabotomisin.netlify.app"
+const siteUrl = "https://tomisin-portfolio.netlify.app"
 const description =
   "Data and AI Engineer building ETL pipelines, analytics warehouses, retrieval-and-ranking systems, and multi-tenant RAG infrastructure."
 

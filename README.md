@@ -2,7 +2,7 @@
 
 Personal portfolio site for Ayodabo Tomisin Kolawole, Data & AI Engineer.
 
-Live: https://ayodabotomisin.netlify.app
+Live: https://tomisin-portfolio.netlify.app
 
 ## Stack
 
